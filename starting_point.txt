@@ -1,0 +1,99 @@
+Summary of Conversation Context and Requirements:
+
+Objective & Use Case:
+
+You’re building an AI study planner for competitive exams (e.g., JEE, NEET, CUET) and job preparation.
+
+The system is integrated into an Android app (Semhub) and must generate realistic, personalized weekly study schedules.
+
+The planner works around a fixed timetable (provided separately) and uses the last 100 chat messages to gather context on the user’s academic priorities, study habits, and preferences.
+
+Initial Prompt Design:
+
+The initial goal was to create a prompt that:
+
+Asks users about their daily study availability, fixed commitments (like school or coaching), subjects that need extra attention, preferred study session lengths (long vs. short/Pomodoro), upcoming exams, and desired monthly or topic-wise goals.
+
+Then confirms details with the user before generating a weekly study schedule.
+
+JSON Response Format:
+
+The response from the AI must be in a strict JSON format to be parsed by the Android app.
+
+The original JSON output included keys such as:
+
+"mssg": a motivational message with a summary and feedback prompt.
+
+"totalTasks": the total number of scheduled study tasks.
+
+"totalTimeNeeded": the aggregate duration of study sessions (formatted like “X hours Y minutes”).
+
+A "weekPlan" array with an entry for each day (Monday to Sunday). Each day contains an array of tasks where each task has:
+
+"taskName" (subject and topic/chapter)
+
+"day" (day of the week)
+
+"time" (time slot in "HH:MM-HH:MM" format).
+
+A separate targets section was initially included for monthly and topic-wise goals but later removed in favor of a simpler structure that uses only tasks.
+
+Enhanced Prompt & Interaction:
+
+The prompt was further refined to include instructions for engaging the user in a conversation, confirming inputs, and ensuring the plan is practical (i.e., not overloading the student).
+
+The final prompt instructs Gemini to first ask a series of questions and then generate a personalized schedule only after receiving a structured JSON input from the user.
+
+Example questions include:
+
+"How many hours can you realistically study each day?"
+
+"Do you have any fixed commitments? Please mention days and timings."
+
+"Which subjects are most challenging for you?"
+
+"Do you prefer long study sessions or short, focused ones?"
+
+"Do you have any upcoming exams or deadlines?"
+
+"Would you like to set any specific monthly or topic-wise study goals?"
+
+Custom Tuning for Specific Exams:
+
+We discussed how to customize or fine-tune Gemini for different Indian exams like JEE, NEET, CUET, and for job preparations.
+
+The custom tuning process can use structured prompt–response pairs, and you can generate synthetic data if sample data is not available.
+
+Tools such as CSV or Google Sheets can be used to import 100–500 examples for tuning.
+
+Kaggle resources were mentioned as potential sources for relevant datasets (e.g., JEE marks vs. rank, NEET results).
+
+Synthetic Data Generation:
+
+When sample data is unavailable, you can generate synthetic prompt–response pairs by writing example scenarios and ideal outputs.
+
+Example prompts for various exams (JEE, NEET, CUET, Job Prep) were discussed, and the corresponding JSON response format was provided.
+
+The goal is to create a dataset that reflects realistic student scenarios, using consistent formatting so the Android app can parse the output easily.
+
+Final Requirements:
+
+The final tuning prompt should ask the user to provide input in a structured JSON format that includes:
+
+"dailyAvailability": time slots available per day.
+
+"taskPreferences": optional tasks the user prefers (with taskName, day, time).
+
+There is no separate targets section; all scheduling is done via tasks.
+
+The final output JSON from Gemini should include:
+
+"mssg"
+
+"totalTasks"
+
+"totalTimeNeeded"
+
+"tasks": an array of tasks with "taskName", "day", and "time".
+
+The overall tone must be supportive, encouraging, and adaptive to feedback.
